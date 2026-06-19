@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>家計アプリ</title>
+<title>家計</title>
 
 <link rel="manifest" href="manifest.json">
 
@@ -70,7 +70,7 @@ button:active {
 <h3>固定費（変更可能）</h3>
 
 家賃
-<input type="number" id="rent" value="56000">
+<input type="number" id="rent" value="56429">
 
 散髪
 <input type="number" id="haircut" value="5000">
@@ -79,7 +79,7 @@ button:active {
 <input type="number" id="utility" value="7000">
 
 定期代
-<input type="number" id="train" value="6400">
+<input type="number" id="train" value="6440">
 </div>
 
 <div class="card">
@@ -152,7 +152,7 @@ function calc() {
 
     document.getElementById("result").innerHTML =
         "必要経費合計: " + (fixed + extra) + "円<br>" +
-        "累計貯金: " + saving + "円<br>" +
+        "累計貯金額: " + saving + "円<br>" +
         "自由に使えるお金: " + available + "円<br>" +
         "週5000円生活後: " + weekly + "円";
 

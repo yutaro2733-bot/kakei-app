@@ -6,7 +6,6 @@
 
 <title>家計アプリ</title>
 
-<!-- PWA -->
 <link rel="manifest" href="manifest.json">
 
 <style>
@@ -35,12 +34,6 @@ input[type="number"] {
     font-size: 16px;
     margin-top: 5px;
     box-sizing: border-box;
-}
-
-label {
-    display: block;
-    margin: 8px 0;
-    font-size: 16px;
 }
 
 button {
@@ -74,12 +67,19 @@ button:active {
 </div>
 
 <div class="card">
-<h3>固定費（支払い済みならチェック）</h3>
+<h3>固定費（変更可能）</h3>
 
-<label><input type="checkbox" id="rent"> 家賃（56429）</label>
-<label><input type="checkbox" id="haircut"> 散髪（5000）</label>
-<label><input type="checkbox" id="utility"> 光熱費（7000）</label>
-<label><input type="checkbox" id="train"> 定期代（6400）</label>
+家賃
+<input type="number" id="rent" value="56000">
+
+散髪
+<input type="number" id="haircut" value="5000">
+
+光熱費
+<input type="number" id="utility" value="7000">
+
+定期代
+<input type="number" id="train" value="6400">
 </div>
 
 <div class="card">
@@ -88,7 +88,7 @@ button:active {
 </div>
 
 <div class="card">
-累積貯金額
+累計貯金額
 <input id="saving" type="number" value="0">
 </div>
 
@@ -102,32 +102,66 @@ button:active {
 <div class="card" id="result"></div>
 
 <script>
+function saveData() {
+    let data = {
+        income: document.getElementById("income").value,
+        rent: document.getElementById("rent").value,
+        haircut: document.getElementById("haircut").value,
+        utility: document.getElementById("utility").value,
+        train: document.getElementById("train").value,
+        extra: document.getElementById("extra").value,
+        saving: document.getElementById("saving").value,
+        weeks: document.getElementById("weeks").value
+    };
+
+    localStorage.setItem("kakeiData", JSON.stringify(data));
+}
+
+function loadData() {
+    let data = localStorage.getItem("kakeiData");
+    if (!data) return;
+
+    data = JSON.parse(data);
+
+    document.getElementById("income").value = data.income || "";
+    document.getElementById("rent").value = data.rent || 56000;
+    document.getElementById("haircut").value = data.haircut || 5000;
+    document.getElementById("utility").value = data.utility || 7000;
+    document.getElementById("train").value = data.train || 6400;
+    document.getElementById("extra").value = data.extra || 0;
+    document.getElementById("saving").value = data.saving || 0;
+    document.getElementById("weeks").value = data.weeks || 4;
+}
+
 function calc() {
     let income = Number(document.getElementById("income").value);
 
-    let fixed = 0;
-
-    if (!document.getElementById("rent").checked) fixed += 56000;
-    if (!document.getElementById("haircut").checked) fixed += 5000;
-    if (!document.getElementById("utility").checked) fixed += 7000;
-    if (!document.getElementById("train").checked) fixed += 6400;
+    let rent = Number(document.getElementById("rent").value);
+    let haircut = Number(document.getElementById("haircut").value);
+    let utility = Number(document.getElementById("utility").value);
+    let train = Number(document.getElementById("train").value);
 
     let extra = Number(document.getElementById("extra").value);
     let saving = Number(document.getElementById("saving").value);
     let weeks = Number(document.getElementById("weeks").value);
+
+    let fixed = rent + haircut + utility + train;
 
     let available = income - fixed - extra - saving;
     let weekly = available - (weeks * 5000);
 
     document.getElementById("result").innerHTML =
         "必要経費合計: " + (fixed + extra) + "円<br>" +
-        "累積貯金: " + saving + "円<br>" +
+        "累計貯金: " + saving + "円<br>" +
         "自由に使えるお金: " + available + "円<br>" +
-        "週5000円生活後の残り: " + weekly + "円";
+        "週5000円生活後: " + weekly + "円";
+
+    saveData();
 }
+
+window.onload = loadData;
 </script>
 
-<!-- Service Worker（オフライン化） -->
 <script>
 if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("sw.js");

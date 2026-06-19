@@ -1,7 +1,7 @@
 {
   "name": "家計アプリ",
   "short_name": "家計",
-  "start_url": "./kakei.html",
+  "start_url": "./kakei3.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#4CAF50",
